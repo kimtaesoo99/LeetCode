@@ -1,51 +1,28 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
+import java.util.PriorityQueue;
 
 class Solution {
-    private boolean[] visited;
-    private List<String> results;
-
     public List<String> findItinerary(List<List<String>> tickets) {
-        visited = new boolean[tickets.size()];
-        results = new ArrayList<>();
+        Map<String, PriorityQueue<String>> graph = new HashMap<>();
 
-        Collections.sort(tickets, new Comparator<List<String>>() {
-            @Override
-            public int compare(List<String> list1, List<String> list2) {
-                for (int i = 0; i < Math.min(list1.size(), list2.size()); i++) {
-                    int comparison = list1.get(i).compareTo(list2.get(i));
-                    if (comparison != 0) {
-                        return comparison;
-                    }
-                }
-                return Integer.compare(list1.size(), list2.size());
+        for (List<String> ticket : tickets) {
+            graph.computeIfAbsent(ticket.get(0), k -> new PriorityQueue<>()).add(ticket.get(1));
+        }
+
+        LinkedList<String> now = new LinkedList<>();
+        now.add("JFK");
+        LinkedList<String> result = new LinkedList<>();
+
+        while (!now.isEmpty()) {
+            while (!graph.getOrDefault(now.peekLast(), new PriorityQueue<>()).isEmpty()) {
+                now.add(graph.get(now.peekLast()).poll());
             }
-        });
-
-        backTracking(tickets, "JFK", 0);
-
-        return Arrays.stream(results.get(0).split(" ")).collect(Collectors.toList());
-    }
-
-    private void backTracking(List<List<String>> tickets, String now, int useTicketCount) {
-        if (!results.isEmpty()){
-            return;
-        }
-        if (useTicketCount == tickets.size()) {
-            results.add(now);
-            return;
+            result.addFirst(now.pollLast());
         }
 
-        for (int i = 0; i < tickets.size(); i++) {
-            if (!visited[i] && now.substring(now.length() - 3).equals(tickets.get(i).get(0))) {
-                visited[i] = true;
-                backTracking(tickets, now + " " + tickets.get(i).get(1), useTicketCount + 1);
-                visited[i] = false;
-            }
-        }
+        return result;
     }
 }
