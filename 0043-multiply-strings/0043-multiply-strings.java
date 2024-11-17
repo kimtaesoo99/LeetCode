@@ -3,6 +3,7 @@ class Solution {
         ArrayList<Integer> answer = new ArrayList<>(
             results.get(results.size() - 1)
         );
+
         ArrayList<Integer> newAnswer = new ArrayList<>();
         for (int j = 0; j < results.size() - 1; ++j) {
             ArrayList<Integer> result = new ArrayList<>(results.get(j));
@@ -21,6 +22,7 @@ class Solution {
             if (carry != 0) {
                 newAnswer.add(carry);
             }
+
             answer = newAnswer;
         }
 
