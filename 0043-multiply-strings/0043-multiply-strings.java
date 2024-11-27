@@ -9,6 +9,7 @@ class Solution {
             ArrayList<Integer> result = new ArrayList<>(results.get(j));
             newAnswer = new ArrayList<>();
 
+
             int carry = 0;
 
             for (int i = 0; i < answer.size() || i < result.size(); ++i) {
