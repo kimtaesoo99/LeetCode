@@ -5,6 +5,7 @@ class Solution {
         );
 
         ArrayList<Integer> newAnswer = new ArrayList<>();
+
         for (int j = 0; j < results.size() - 1; ++j) {
             ArrayList<Integer> result = new ArrayList<>(results.get(j));
             newAnswer = new ArrayList<>();
